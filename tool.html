@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Tool — StaMPS Data Framework</title>
+<meta name="description" content="Interactive preliminary tool: the StaMPS item library with expert consensus verdicts and reporting guideline mapping, filterable by verdict, timepoint, and guideline.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* --- COSMIP preliminary tool styles (reproduced) --- */
+  .cosmip-wrap { padding: 24px 32px 60px; }
+  .cosmip-wrap h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    letter-spacing: 0.2px;
+    font-family: var(--font);
+  }
+  .cosmip-wrap .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .controls {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .control-group > label.group-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #000;
+    font-weight: 600;
+  }
+  .checkbox-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fbfaf8;
+    user-select: none;
+  }
+  .checkbox-item input {
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  .checkbox-item.core.active { border-color: var(--core); background: #fbeee7; }
+  .checkbox-item.group.active { border-color: var(--group); background: #eef1ea; }
+  .checkbox-item.econ.active { border-color: var(--econ); background: #e9eff4; }
+  .checkbox-item.notcore.active { border-color: #9a968c; background: #f0efec; }
+  .checkbox-item.timepoint-item { transition: border-color 0.1s, background 0.1s; }
+
+  .cosmip-wrap select, .cosmip-wrap input[type="text"] {
+    font-family: var(--font);
+    font-size: 13.5px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    min-width: 220px;
+  }
+  .reset-btn {
+    align-self: flex-end;
+    font-family: var(--font);
+    font-size: 12.5px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: var(--muted);
+    cursor: pointer;
+    margin-left: auto;
+  }
+  .reset-btn:hover { background: #efece5; }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .cosmip-wrap table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--panel);
+    font-size: 13.5px;
+  }
+  .cosmip-wrap thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .cosmip-wrap thead th {
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-size: 11.5px;
+    color: #000;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 12px;
+    background: #ffffff;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .cosmip-wrap thead th:hover { color: var(--accent); }
+  .cosmip-wrap thead th .arrow { font-size: 9px; margin-left: 3px; opacity: 0.7; }
+  .cosmip-wrap tbody td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #ece9e1;
+    vertical-align: top;
+  }
+  .cosmip-wrap tbody tr:hover td { filter: brightness(0.96); }
+  .cosmip-wrap tbody tr:last-child td { border-bottom: none; }
+
+  tr.category-header td {
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 9px 12px;
+    border-bottom: none;
+  }
+  tr.subcategory-header { cursor: pointer; }
+  tr.subcategory-header td {
+    font-weight: 700;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 7px 12px;
+    border-bottom: none;
+  }
+  tr.subcategory-header:hover td { filter: brightness(0.94); }
+  .subcat-toggle {
+    display: inline-block;
+    width: 14px;
+    font-size: 9px;
+    margin-right: 4px;
+    opacity: 0.85;
+  }
+  td.item { min-width: 220px; }
+  td.num { text-align: center; }
+  td.guidelines { color: var(--muted); font-size: 12.5px; }
+
+  .item-cell { display: flex; align-items: flex-start; gap: 6px; }
+  .toggle-btn {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    line-height: 15px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(255,255,255,0.6);
+    margin-top: 1px;
+  }
+  .toggle-btn:hover { background: #fff; color: var(--text); }
+  .toggle-spacer { flex: 0 0 auto; width: 16px; height: 16px; }
+  .item-text { flex: 1 1 auto; color: #000; }
+
+  tr[data-level="1"] .item-text { color: #000; }
+  tr[data-level="2"] .item-text { color: #000; font-size: 13px; }
+  tr[data-level="3"] .item-text { color: #000; font-size: 12.5px; }
+
+  .cosmip-wrap .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    padding: 2px 7px;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+  .badge.CORE { background: #fbeee7; color: var(--core); }
+  .badge.Group_only { background: #eef1ea; color: var(--group); }
+  .badge.Economic_only { background: #e9eff4; color: var(--econ); }
+  .badge.none { background: #f0efec; color: #9a968c; }
+
+  .table-wrap {
+    max-height: 72vh;
+    overflow: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .table-wrap table { border: none; border-radius: 0; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="status-banner">
+  Preliminary tool — reflects consensus after Round 2 of 4. Items without a Core verdict remain to be evaluated in Rounds 3–4.
+</div>
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="mark">StaMPS</span><span class="tag">Data Framework</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="tool.html" class="active">Interactive Tool</a>
+      <a href="progress.html">Study Progress</a>
+      <a href="team.html">Team</a>
+      <a class="cta" href="mailto:kyle.greenway@mcgill.ca?subject=StaMPS%20Data%20Framework%20%E2%80%94%20Tool%20Feedback">Give Feedback</a>
+    </div>
+  </div>
+</nav>
+
+<div class="cosmip-wrap">
+
+<h1>StaMPS Preliminary Variables</h1>
+<div class="subtitle">StaMPS Data Framework — Standardizing Measures and Practices in Psychedelic Science. Item library with expert consensus and reporting guideline mapping.</div>
+
+<div class="controls">
+  <div class="control-group">
+    <label class="group-title">Tentative Core Verdict</label>
+    <div class="checkbox-row">
+      <label class="checkbox-item core" id="lbl-core">
+        <input type="checkbox" id="chk-core"> For All Purposes
+      </label>
+      <label class="checkbox-item econ" id="lbl-econ">
+        <input type="checkbox" id="chk-econ"> For Economic Purposes
+      </label>
+      <label class="checkbox-item group" id="lbl-group">
+        <input type="checkbox" id="chk-group"> For Group Interventions
+      </label>
+      <label class="checkbox-item notcore" id="lbl-notcore">
+        <input type="checkbox" id="chk-notcore"> Not Core
+      </label>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="group-title">Timepoint</label>
+    <div class="checkbox-row" id="timepoint-row"></div>
+  </div>
+
+  <div class="control-group">
+    <label class="group-title">Reporting Guideline</label>
+    <select id="sel-guideline">
+      <option value="">All guidelines</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label class="group-title">Search item</label>
+    <input type="text" id="search-box" placeholder="Filter by item text...">
+  </div>
+
+  <div class="control-group">
+    <label class="group-title">Tree</label>
+    <div class="checkbox-row">
+      <button class="reset-btn" id="expand-all-btn" style="margin-left:0;">Expand all</button>
+      <button class="reset-btn" id="collapse-all-btn" style="margin-left:0;">Collapse all</button>
+    </div>
+  </div>
+
+  <button class="reset-btn" id="reset-btn">Reset filters</button>
+</div>
+
+<div class="meta-row">
+  <span id="result-count"></span>
+  <span id="filter-summary"></span>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th data-key="item">Item <span class="arrow"></span></th>
+      <th data-key="numExperts">Experts Suggesting Core <span class="arrow"></span></th>
+      <th data-key="verdict">Verdict <span class="arrow"></span></th>
+      <th data-key="guidelines">Reporting Guidelines <span class="arrow"></span></th>
+    </tr>
+  </thead>
+  <tbody id="table-body"></tbody>
+</table>
+<div class="empty-state" id="empty-state" style="display:none;">No items match the current filters.</div>
+</div>
+
+<div class="notice" style="margin-top:22px;">
+  <strong>This tool is a work in progress — help us improve it.</strong>
+  Verdicts reflect consensus after two of four Delphi rounds: items marked "—" have not been rejected — most remain to be evaluated in Rounds 3–4, when Core and Supplementary classifications are finalized. If an item seems missing, misplaced, or mislabeled — or you have suggestions for the tool itself — please
+  <a href="mailto:kyle.greenway@mcgill.ca?subject=StaMPS%20Data%20Framework%20%E2%80%94%20Tool%20Feedback">email the study team</a>.
+</div>
+
+</div><!-- /cosmip-wrap -->
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="cols">
+      <div>
+        <h4>StaMPS Data Framework</h4>
+        <p>Standardizing Measures and Practices in Psychedelic Science.<br>A modified Delphi expert-consensus study (protocol 25-05-146-01),<br>led at McGill University &amp; the Lady Davis Institute for Medical Research.</p>
+      </div>
+      <div>
+        <h4>Pages</h4>
+        <p><a href="index.html">Home</a><br><a href="tool.html">Interactive Tool</a><br><a href="progress.html">Study Progress</a><br><a href="team.html">Team</a></p>
+      </div>
+      <div>
+        <h4>Contact &amp; Support</h4>
+        <p><a href="mailto:kyle.greenway@mcgill.ca">kyle.greenway@mcgill.ca</a><br>Supported by the <a href="https://www.pmhaa.org/" target="_blank" rel="noopener">Psychedelic Mental Health Access Alliance</a>,<br>FRQS, and the Lady Davis Institute.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script>
+// Adapter: expand the compact data rows into the object format used by the
+// original COSMIP preliminary tool script below.
+const VERDICT_NAMES = [null, 'CORE', 'Economic only', 'Group only'];
+const DATA = D.map(r => ({
+  category: CATS[r[0]],
+  subcategory: SUBS[r[1]],
+  item: r[2],
+  level: r[3],
+  numExperts: r[4],
+  verdict: VERDICT_NAMES[r[5]],
+  guidelines: GUIDES.filter((g, i) => r[6] & (1 << i)),
+  timepoint: r[7] >= 0 ? TPS[r[7]] : null
+}));
+DATA.forEach((r, i) => { r.id = i; });
+
+const allGuidelines = Array.from(new Set(DATA.flatMap(r => r.guidelines))).sort();
+const guidelineSelect = document.getElementById('sel-guideline');
+allGuidelines.forEach(g => {
+  const opt = document.createElement('option');
+  opt.value = g;
+  opt.textContent = g;
+  guidelineSelect.appendChild(opt);
+});
+
+// -- timepoint checkboxes -----------------------------------------------
+const TIMEPOINT_PALETTE = [
+  { h: 200, s: 45 },
+  { h: 150, s: 30 },
+  { h: 42,  s: 55 },
+  { h: 15,  s: 50 },
+  { h: 280, s: 25 },
+];
+const allTimepoints = Array.from(new Set(DATA.map(r => r.timepoint).filter(Boolean)));
+const timepointColorMap = new Map();
+allTimepoints.forEach((tp, i) => timepointColorMap.set(tp, TIMEPOINT_PALETTE[i % TIMEPOINT_PALETTE.length]));
+
+const timepointRow = document.getElementById('timepoint-row');
+allTimepoints.forEach((tp, i) => {
+  const label = document.createElement('label');
+  label.className = 'checkbox-item timepoint-item';
+  label.id = `lbl-tp-${i}`;
+  label.setAttribute('data-timepoint', tp);
+  label.innerHTML = `<input type="checkbox" id="chk-tp-${i}"> ${escapeHtml(tp)}`;
+  timepointRow.appendChild(label);
+});
+
+// -- category color palette --------------------------------------------
+const PALETTE = [
+  { h: 16,  s: 55 },  // clay / terracotta
+  { h: 88,  s: 26 },  // moss
+  { h: 206, s: 38 },  // steel blue
+  { h: 42,  s: 58 },  // ochre / gold
+  { h: 266, s: 20 },  // muted plum
+  { h: 174, s: 28 },  // teal
+  { h: 340, s: 32 },  // dusty rose
+  { h: 28,  s: 18 },  // warm taupe
+];
+function hsl(h, s, l) { return `hsl(${h}, ${s}%, ${l}%)`; }
+
+const categoryHueMap = new Map();
+(function assignCategoryColors() {
+  const seen = [];
+  DATA.forEach(r => { if (!seen.includes(r.category)) seen.push(r.category); });
+  seen.forEach((cat, i) => categoryHueMap.set(cat, PALETTE[i % PALETTE.length]));
+})();
+
+function catColors(cat) {
+  const p = categoryHueMap.get(cat) || { h: 0, s: 0 };
+  return {
+    header: hsl(p.h, p.s, 39),
+    sub: hsl(p.h, Math.max(p.s - 10, 8), 89),
+    subText: hsl(p.h, p.s, 25),
+    tint0: hsl(p.h, Math.max(p.s - 22, 5), 96.5),
+    tint1: hsl(p.h, Math.max(p.s - 24, 5), 97.5),
+    tint2: hsl(p.h, Math.max(p.s - 26, 5), 98.5),
+  };
+}
+// ------------------------------------------------------------------------
+
+let sortKey = null;
+let sortDir = 1;
+const nodeOverride = new Map(); // id -> explicit expanded (true/false) set by user clicks
+const subcategoryOverride = new Map(); // "category::subcategory" -> explicit expanded (true/false)
+function subKeyOf(category, subcategory) { return `${category}::${subcategory}`; }
+
+function currentFilters() {
+  const timepoints = allTimepoints.filter((tp, i) => document.getElementById(`chk-tp-${i}`).checked);
+  return {
+    core: document.getElementById('chk-core').checked,
+    group: document.getElementById('chk-group').checked,
+    econ: document.getElementById('chk-econ').checked,
+    notcore: document.getElementById('chk-notcore').checked,
+    timepoints: timepoints,
+    guideline: guidelineSelect.value,
+    search: document.getElementById('search-box').value.trim().toLowerCase()
+  };
+}
+
+function verdictClass(v) {
+  if (v === 'CORE') return 'CORE';
+  if (v === 'Group only') return 'Group_only';
+  if (v === 'Economic only') return 'Economic_only';
+  return 'none';
+}
+
+function matchesFilter(r, f, anyVerdictSelected) {
+  if (anyVerdictSelected) {
+    const matches =
+      (f.core && r.verdict === 'CORE') ||
+      (f.group && r.verdict === 'Group only') ||
+      (f.econ && r.verdict === 'Economic only') ||
+      (f.notcore && !r.verdict);
+    if (!matches) return false;
+  }
+  if (f.timepoints && f.timepoints.length > 0 && !f.timepoints.includes(r.timepoint)) return false;
+  if (f.guideline && !r.guidelines.includes(f.guideline)) return false;
+  if (f.search && !r.item.toLowerCase().includes(f.search)) return false;
+  return true;
+}
+
+function buildTree(rows) {
+  const categoryOrder = [];
+  const catMap = new Map();
+  rows.forEach(r => {
+    if (!catMap.has(r.category)) { catMap.set(r.category, { subOrder: [], subMap: new Map() }); categoryOrder.push(r.category); }
+    const cat = catMap.get(r.category);
+    if (!cat.subMap.has(r.subcategory)) { cat.subMap.set(r.subcategory, []); cat.subOrder.push(r.subcategory); }
+    cat.subMap.get(r.subcategory).push(r);
+  });
+
+  function nestByLevel(list) {
+    const roots = [];
+    const stack = [];
+    list.forEach(r => {
+      const node = { row: r, children: [] };
+      while (stack.length > r.level) stack.pop();
+      if (stack.length === 0) {
+        roots.push(node);
+      } else {
+        stack[stack.length - 1].children.push(node);
+      }
+      stack.push(node);
+    });
+    return roots;
+  }
+
+  return categoryOrder.map(cat => {
+    const c = catMap.get(cat);
+    const subs = c.subOrder.map(sub => ({
+      subcategory: sub,
+      roots: nestByLevel(c.subMap.get(sub))
+    }));
+    return { category: cat, subs };
+  });
+}
+
+function subtreeMatches(node, f, anyVerdictSelected) {
+  if (matchesFilter(node.row, f, anyVerdictSelected)) return true;
+  return node.children.some(ch => subtreeMatches(ch, f, anyVerdictSelected));
+}
+
+function sortNodes(nodes) {
+  if (!sortKey) return nodes;
+  return nodes.slice().sort((a, b) => {
+    const ra = a.row, rb = b.row;
+    let av = ra[sortKey], bv = rb[sortKey];
+    if (sortKey === 'numExperts') {
+      av = av === null ? -1 : av;
+      bv = bv === null ? -1 : bv;
+      return (av - bv) * sortDir;
+    }
+    if (sortKey === 'guidelines') {
+      av = ra.guidelines.join(', '); bv = rb.guidelines.join(', ');
+    }
+    av = (av || '').toString().toLowerCase();
+    bv = (bv || '').toString().toLowerCase();
+    if (av < bv) return -1 * sortDir;
+    if (av > bv) return 1 * sortDir;
+    return 0;
+  });
+}
+
+function renderNode(node, frag, f, anyFilterActive, anyVerdictSelected, colors) {
+  const visible = anyFilterActive ? subtreeMatches(node, f, anyVerdictSelected) : true;
+  if (!visible) return false;
+
+  const r = node.row;
+  const hasChildren = node.children.length > 0;
+
+  // Expand/collapse state: once a user has explicitly clicked a node's
+  // toggle, that choice always wins (nodeOverride), so every visible item
+  // stays manually collapsible/expandable no matter what filters are set.
+  // Only when the user has never touched a node do we fall back to a
+  // sensible default: fully open with no filter, or auto-opened just far
+  // enough to surface a matching descendant when a filter is active.
+  let expanded;
+  if (nodeOverride.has(r.id)) {
+    expanded = nodeOverride.get(r.id);
+  } else if (!anyFilterActive) {
+    expanded = true;
+  } else {
+    expanded = node.children.some(ch => subtreeMatches(ch, f, anyVerdictSelected));
+  }
+  expanded = hasChildren && expanded;
+
+  const tr = document.createElement('tr');
+  tr.setAttribute('data-level', String(r.level));
+  tr.setAttribute('data-id', String(r.id));
+  const vClass = verdictClass(r.verdict);
+  const vLabel = r.verdict ? r.verdict : '—';
+  const indent = 8 + r.level * 24;
+  const tint = r.level <= 0 ? colors.tint0 : (r.level === 1 ? colors.tint1 : colors.tint2);
+  const toggleHtml = hasChildren
+    ? `<span class="toggle-btn" data-toggle-id="${r.id}">${expanded ? '▾' : '▸'}</span>`
+    : `<span class="toggle-spacer"></span>`;
+
+  tr.innerHTML = `
+    <td class="item" style="background:${tint};">
+      <div class="item-cell" style="padding-left:${indent}px;">
+        ${toggleHtml}
+        <span class="item-text">${escapeHtml(r.item)}</span>
+      </div>
+    </td>
+    <td class="num" style="background:${tint};">${r.numExperts === null ? '—' : r.numExperts}</td>
+    <td style="background:${tint};"><span class="badge ${vClass}">${escapeHtml(vLabel)}</span></td>
+    <td class="guidelines" style="background:${tint};">${escapeHtml(r.guidelines.join(', '))}</td>
+  `;
+  frag.appendChild(tr);
+
+  if (expanded) {
+    sortNodes(node.children).forEach(child => renderNode(child, frag, f, anyFilterActive, anyVerdictSelected, colors));
+  }
+  return true;
+}
+
+function render() {
+  const f = currentFilters();
+  const anyVerdictSelected = f.core || f.group || f.econ || f.notcore;
+  const anyFilterActive = anyVerdictSelected || f.timepoints.length > 0 || !!f.guideline || !!f.search;
+
+  const tree = buildTree(DATA);
+
+  const tbody = document.getElementById('table-body');
+  tbody.innerHTML = '';
+
+  const frag = document.createDocumentFragment();
+  let anyRendered = false;
+
+  tree.forEach(catGroup => {
+    const catVisible = !anyFilterActive || catGroup.subs.some(sub =>
+      sub.roots.some(node => subtreeMatches(node, f, anyVerdictSelected)));
+    if (!catVisible) return;
+
+    const colors = catColors(catGroup.category);
+
+    const catTr = document.createElement('tr');
+    catTr.className = 'category-header';
+    catTr.innerHTML = `<td colspan="4" style="background:${colors.header};color:#fff;">${escapeHtml(catGroup.category)}</td>`;
+    frag.appendChild(catTr);
+
+    catGroup.subs.forEach(sub => {
+      const subVisible = !anyFilterActive || sub.roots.some(node => subtreeMatches(node, f, anyVerdictSelected));
+      if (!subVisible) return;
+
+      const subKey = subKeyOf(catGroup.category, sub.subcategory);
+      const subExpanded = subcategoryOverride.has(subKey) ? subcategoryOverride.get(subKey) : true;
+
+      const subTr = document.createElement('tr');
+      subTr.className = 'subcategory-header';
+      subTr.setAttribute('data-subkey', subKey);
+      subTr.innerHTML = `<td colspan="4" style="background:${colors.sub};color:${colors.subText};">
+        <span class="subcat-toggle" data-subkey="${escapeHtml(subKey)}">${subExpanded ? '▾' : '▸'}</span>
+        <span class="subcat-label">${escapeHtml(sub.subcategory)}</span>
+      </td>`;
+      frag.appendChild(subTr);
+
+      if (subExpanded) {
+        sortNodes(sub.roots).forEach(node => {
+          const rendered = renderNode(node, frag, f, anyFilterActive, anyVerdictSelected, colors);
+          anyRendered = anyRendered || rendered;
+        });
+      } else {
+        anyRendered = true;
+      }
+    });
+  });
+
+  tbody.appendChild(frag);
+  document.getElementById('empty-state').style.display = anyRendered ? 'none' : 'block';
+
+  const matchCount = anyFilterActive
+    ? DATA.filter(r => matchesFilter(r, f, anyVerdictSelected)).length
+    : DATA.length;
+  document.getElementById('result-count').textContent = `${matchCount} of ${DATA.length} items`;
+
+  const parts = [];
+  if (f.core) parts.push('For All Purposes');
+  if (f.econ) parts.push('For Economic Purposes');
+  if (f.group) parts.push('For Group Interventions');
+  if (f.notcore) parts.push('Not Core');
+  let summary = parts.length ? `Verdict: ${parts.join(' + ')}` : '';
+  if (f.timepoints.length) summary += (summary ? ' · ' : '') + `Timepoint: ${f.timepoints.join(' + ')}`;
+  if (f.guideline) summary += (summary ? ' · ' : '') + `Guideline: ${f.guideline}`;
+  if (f.search) summary += (summary ? ' · ' : '') + `Search: "${f.search}"`;
+  document.getElementById('filter-summary').textContent = summary;
+
+  document.getElementById('lbl-core').classList.toggle('active', f.core);
+  document.getElementById('lbl-group').classList.toggle('active', f.group);
+  document.getElementById('lbl-econ').classList.toggle('active', f.econ);
+  document.getElementById('lbl-notcore').classList.toggle('active', f.notcore);
+  allTimepoints.forEach((tp, i) => {
+    const lbl = document.getElementById(`lbl-tp-${i}`);
+    const isActive = f.timepoints.includes(tp);
+    lbl.classList.toggle('active', isActive);
+    const c = timepointColorMap.get(tp);
+    if (isActive) {
+      lbl.style.borderColor = hsl(c.h, c.s, 45);
+      lbl.style.background = hsl(c.h, Math.max(c.s - 15, 8), 92);
+    } else {
+      lbl.style.borderColor = '';
+      lbl.style.background = '';
+    }
+  });
+
+  tbody.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = parseInt(btn.getAttribute('data-toggle-id'), 10);
+      const currentlyExpanded = btn.textContent.trim() === '▾';
+      nodeOverride.set(id, !currentlyExpanded);
+      render();
+    });
+  });
+
+  tbody.querySelectorAll('tr.subcategory-header').forEach(row => {
+    row.addEventListener('click', () => {
+      const btn = row.querySelector('.subcat-toggle');
+      if (!btn) return;
+      const subKey = btn.getAttribute('data-subkey');
+      const currentlyExpanded = btn.textContent.trim() === '▾';
+      subcategoryOverride.set(subKey, !currentlyExpanded);
+      render();
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return (s || '').toString()
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+['chk-core', 'chk-group', 'chk-econ', 'chk-notcore'].forEach(id => {
+  document.getElementById(id).addEventListener('change', render);
+});
+allTimepoints.forEach((tp, i) => {
+  document.getElementById(`chk-tp-${i}`).addEventListener('change', render);
+});
+guidelineSelect.addEventListener('change', render);
+document.getElementById('search-box').addEventListener('input', render);
+document.getElementById('reset-btn').addEventListener('click', () => {
+  document.getElementById('chk-core').checked = false;
+  document.getElementById('chk-group').checked = false;
+  document.getElementById('chk-econ').checked = false;
+  document.getElementById('chk-notcore').checked = false;
+  allTimepoints.forEach((tp, i) => { document.getElementById(`chk-tp-${i}`).checked = false; });
+  guidelineSelect.value = '';
+  document.getElementById('search-box').value = '';
+  sortKey = null; sortDir = 1;
+  nodeOverride.clear();
+  subcategoryOverride.clear();
+  render();
+});
+document.getElementById('expand-all-btn').addEventListener('click', () => {
+  DATA.forEach(r => nodeOverride.set(r.id, true));
+  subcategoryOverride.clear();
+  render();
+});
+document.getElementById('collapse-all-btn').addEventListener('click', () => {
+  nodeOverride.clear();
+  subcategoryOverride.clear();
+  DATA.forEach(r => { if (r.level === 0) nodeOverride.set(r.id, false); });
+  render();
+});
+
+document.querySelectorAll('thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+    document.querySelectorAll('thead .arrow').forEach(a => a.textContent = '');
+    th.querySelector('.arrow').textContent = sortDir === 1 ? '▲' : '▼';
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
