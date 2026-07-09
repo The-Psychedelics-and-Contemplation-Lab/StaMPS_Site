@@ -102,6 +102,17 @@
     margin-left: auto;
   }
   .reset-btn:hover { background: #efece5; color: var(--text); border-color: #c9c4b8; }
+  #reset-btn {
+    align-self: flex-end;
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 9px 20px;
+    color: var(--accent);
+    background: #fff;
+    border-color: var(--accent);
+    margin-right: 40px;
+  }
+  #reset-btn:hover { background: var(--accent-light); color: var(--accent-dark); border-color: var(--accent-dark); }
 
   .meta-row {
     display: flex;
@@ -243,6 +254,7 @@
     .control-group { width: 100%; }
     .cosmip-wrap select, .cosmip-wrap input[type="text"] { min-width: 0; width: 100%; }
     .reset-btn { margin-left: 0; align-self: flex-start; }
+    #reset-btn { align-self: stretch; width: 100%; margin-right: 0; }
     .table-wrap { max-height: none; }
     .cosmip-wrap table { font-size: 12.5px; }
     .cosmip-wrap thead th { padding: 8px 8px; font-size: 10.5px; }
