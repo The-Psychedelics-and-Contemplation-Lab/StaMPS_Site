@@ -37,9 +37,15 @@
     margin-bottom: 18px;
     display: flex;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 18px 24px;
     align-items: flex-start;
+    justify-content: space-between;
   }
+  /* Verdict & Timepoint span the full width, chips spread edge-to-edge */
+  .controls > .control-group:nth-child(1),
+  .controls > .control-group:nth-child(2) { width: 100%; }
+  .controls > .control-group:nth-child(1) .checkbox-row,
+  #timepoint-row { justify-content: space-between; width: 100%; }
   .control-group {
     display: flex;
     flex-direction: column;
@@ -110,7 +116,7 @@
     color: var(--accent);
     background: #fff;
     border-color: var(--accent);
-    margin-right: 40px;
+    margin-left: auto;
   }
   #reset-btn:hover { background: var(--accent-light); color: var(--accent-dark); border-color: var(--accent-dark); }
 
@@ -252,6 +258,7 @@
     .cosmip-wrap h1 { font-size: 20px; }
     .controls { gap: 14px; padding: 14px; }
     .control-group { width: 100%; }
+    .controls > .control-group:nth-child(1) .checkbox-row, #timepoint-row { justify-content: flex-start; }
     .cosmip-wrap select, .cosmip-wrap input[type="text"] { min-width: 0; width: 100%; }
     .reset-btn { margin-left: 0; align-self: flex-start; }
     #reset-btn { align-self: stretch; width: 100%; margin-right: 0; }
