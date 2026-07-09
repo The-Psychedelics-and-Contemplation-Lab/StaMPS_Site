@@ -35,17 +35,23 @@
     border-radius: 8px;
     padding: 16px 20px;
     margin-bottom: 18px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 18px 24px;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 16px;
+    align-items: end;
   }
-  /* Verdict & Timepoint span the full width, chips spread edge-to-edge */
+  /* Verdict & Timepoint span the full width; their chips grow to fill it */
   .controls > .control-group:nth-child(1),
-  .controls > .control-group:nth-child(2) { width: 100%; }
+  .controls > .control-group:nth-child(2) { grid-column: 1 / -1; }
   .controls > .control-group:nth-child(1) .checkbox-row,
-  #timepoint-row { justify-content: space-between; width: 100%; }
+  #timepoint-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; }
+  .controls > .control-group:nth-child(1) .checkbox-item,
+  #timepoint-row .checkbox-item { flex: 1 1 150px; justify-content: center; }
+  /* Bottom row: guideline | search | tree | reset */
+  .controls > .control-group:nth-child(3) { grid-column: 1; }
+  .controls > .control-group:nth-child(4) { grid-column: 2; }
+  .controls > .control-group:nth-child(4) input { width: 100%; }
+  .controls > .control-group:nth-child(5) { grid-column: 3; }
   .control-group {
     display: flex;
     flex-direction: column;
@@ -109,14 +115,19 @@
   }
   .reset-btn:hover { background: #efece5; color: var(--text); border-color: #c9c4b8; }
   #reset-btn {
-    align-self: flex-end;
+    grid-column: 4;
+    align-self: end;
+    justify-self: end;
+    min-height: 62px;
+    width: 96px;
     font-size: 13.5px;
     font-weight: 600;
-    padding: 9px 20px;
+    line-height: 1.2;
+    white-space: normal;
+    padding: 6px 10px;
     color: var(--accent);
     background: #fff;
     border-color: var(--accent);
-    margin-left: auto;
   }
   #reset-btn:hover { background: var(--accent-light); color: var(--accent-dark); border-color: var(--accent-dark); }
 
@@ -256,12 +267,13 @@
   @media (max-width: 640px) {
     .cosmip-wrap { padding: 16px 14px 40px; }
     .cosmip-wrap h1 { font-size: 20px; }
-    .controls { gap: 14px; padding: 14px; }
-    .control-group { width: 100%; }
-    .controls > .control-group:nth-child(1) .checkbox-row, #timepoint-row { justify-content: flex-start; }
+    .controls { gap: 14px; padding: 14px; grid-template-columns: 1fr; }
+    .controls > .control-group:nth-child(3),
+    .controls > .control-group:nth-child(4),
+    .controls > .control-group:nth-child(5) { grid-column: 1; }
     .cosmip-wrap select, .cosmip-wrap input[type="text"] { min-width: 0; width: 100%; }
     .reset-btn { margin-left: 0; align-self: flex-start; }
-    #reset-btn { align-self: stretch; width: 100%; margin-right: 0; }
+    #reset-btn { grid-column: 1; justify-self: stretch; width: 100%; min-height: 0; }
     .table-wrap { max-height: none; }
     .cosmip-wrap table { font-size: 12.5px; }
     .cosmip-wrap thead th { padding: 8px 8px; font-size: 10.5px; }
