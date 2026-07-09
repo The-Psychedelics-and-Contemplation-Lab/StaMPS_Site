@@ -133,7 +133,10 @@ p { margin: 0 0 14px; }
 a { color: var(--accent); }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin: 24px 0; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 24px 0; }
+.block.alt .card-grid { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 760px) { .block.alt .card-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 440px) { .block.alt .card-grid { grid-template-columns: 1fr; } }
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
