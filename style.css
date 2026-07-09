@@ -133,7 +133,7 @@ p { margin: 0 0 14px; }
 a { color: var(--accent); }
 
 /* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 24px 0; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin: 24px 0; }
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -197,11 +197,11 @@ table.simple tr:last-child td { border-bottom: none; }
   text-transform: uppercase;
   white-space: nowrap;
 }
-.badge.core { background: #fbeee7; color: var(--core); }
-.badge.group { background: #eef1ea; color: var(--group); }
-.badge.econ { background: #e9eff4; color: var(--econ); }
-.badge.pending { background: #f7efdb; color: var(--pending); }
-.badge.na { background: #f0efec; color: #9a968c; }
+.badge.core { background: #fbeee7; color: var(--core); border: 1px solid #eccdbf; }
+.badge.group { background: #eef1ea; color: #4f6244; border: 1px solid #d3ddc9; }
+.badge.econ { background: #e9eff4; color: #3c5a79; border: 1px solid #c9d8e6; }
+.badge.pending { background: #f7efdb; color: #7d6320; border: 1px solid #e6d5a8; }
+.badge.na { background: #f0efec; color: #7c786f; border: 1px solid #e0ddd4; }
 
 /* Timeline (progress page) */
 .timeline { border-left: 3px solid var(--accent-light); margin: 24px 0 24px 8px; padding-left: 28px; }
