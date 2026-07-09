@@ -35,23 +35,27 @@
     border-radius: 8px;
     padding: 16px 20px;
     margin-bottom: 18px;
-    display: grid;
-    grid-template-columns: 1fr 1fr auto auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 16px;
-    align-items: end;
   }
-  /* Verdict & Timepoint span the full width; their chips grow to fill it */
-  .controls > .control-group:nth-child(1),
-  .controls > .control-group:nth-child(2) { grid-column: 1 / -1; }
-  .controls > .control-group:nth-child(1) .checkbox-row,
-  #timepoint-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; }
-  .controls > .control-group:nth-child(1) .checkbox-item,
-  #timepoint-row .checkbox-item { flex: 1 1 150px; justify-content: center; }
-  /* Bottom row: guideline | search | tree | reset */
-  .controls > .control-group:nth-child(3) { grid-column: 1; }
-  .controls > .control-group:nth-child(4) { grid-column: 2; }
-  .controls > .control-group:nth-child(4) input { width: 100%; }
-  .controls > .control-group:nth-child(5) { grid-column: 3; }
+  .ctrl-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
+  #row-verdict .control-group, #row-timepoint .control-group { width: 100%; }
+  /* Verdict & Timepoint use an identical 4-column grid: the two rows stay
+     aligned with each other at every width, shrink cleanly, and never overflow. */
+  #row-verdict .checkbox-row, #row-timepoint .checkbox-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+  #row-verdict .checkbox-item, #row-timepoint .checkbox-item { justify-content: center; }
+  /* Bottom row: guideline & search grow, tree keeps its size, reset tile at right */
+  #row-bottom .control-group { flex: 1 1 200px; }
+  #row-bottom #tree-group { flex: 0 0 auto; }
+  #row-bottom select, #row-bottom input[type="text"] { width: 100%; }
+  #tree-group .checkbox-row { flex-wrap: nowrap; }
   .control-group {
     display: flex;
     flex-direction: column;
@@ -115,9 +119,9 @@
   }
   .reset-btn:hover { background: #efece5; color: var(--text); border-color: #c9c4b8; }
   #reset-btn {
-    grid-column: 4;
-    align-self: end;
-    justify-self: end;
+    flex: 0 0 auto;
+    align-self: flex-end;
+    margin-left: auto;
     min-height: 62px;
     width: 96px;
     font-size: 13.5px;
@@ -264,16 +268,18 @@
     color: var(--muted);
   }
 
+  /* Chips drop to a 2x2 grid (still aligned between the two rows) before they get cramped */
+  @media (max-width: 760px) {
+    #row-verdict .checkbox-row, #row-timepoint .checkbox-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   @media (max-width: 640px) {
     .cosmip-wrap { padding: 16px 14px 40px; }
     .cosmip-wrap h1 { font-size: 20px; }
-    .controls { gap: 14px; padding: 14px; grid-template-columns: 1fr; }
-    .controls > .control-group:nth-child(3),
-    .controls > .control-group:nth-child(4),
-    .controls > .control-group:nth-child(5) { grid-column: 1; }
+    .controls { gap: 14px; padding: 14px; }
     .cosmip-wrap select, .cosmip-wrap input[type="text"] { min-width: 0; width: 100%; }
-    .reset-btn { margin-left: 0; align-self: flex-start; }
-    #reset-btn { grid-column: 1; justify-self: stretch; width: 100%; min-height: 0; }
+    #row-bottom .control-group { flex: 1 1 100%; }
+    #reset-btn { width: 100%; align-self: stretch; margin-left: 0; min-height: 0; }
     .table-wrap { max-height: none; }
     .cosmip-wrap table { font-size: 12.5px; }
     .cosmip-wrap thead th { padding: 8px 8px; font-size: 10.5px; }
@@ -308,50 +314,56 @@
 <div class="subtitle">StaMPS Data Framework — Standardizing Measures and Practices in Psychedelic Science. Item library with expert consensus and reporting guideline mapping.</div>
 
 <div class="controls">
-  <div class="control-group">
-    <label class="group-title">Tentative Core Verdict</label>
-    <div class="checkbox-row">
-      <label class="checkbox-item core" id="lbl-core">
-        <input type="checkbox" id="chk-core"> For All Purposes
-      </label>
-      <label class="checkbox-item econ" id="lbl-econ">
-        <input type="checkbox" id="chk-econ"> For Economic Purposes
-      </label>
-      <label class="checkbox-item group" id="lbl-group">
-        <input type="checkbox" id="chk-group"> For Group Interventions
-      </label>
-      <label class="checkbox-item notcore" id="lbl-notcore">
-        <input type="checkbox" id="chk-notcore"> Not Core
-      </label>
+  <div class="ctrl-row" id="row-verdict">
+    <div class="control-group">
+      <label class="group-title">Tentative Core Verdict</label>
+      <div class="checkbox-row">
+        <label class="checkbox-item core" id="lbl-core">
+          <input type="checkbox" id="chk-core"> For All Purposes
+        </label>
+        <label class="checkbox-item econ" id="lbl-econ">
+          <input type="checkbox" id="chk-econ"> For Economic Purposes
+        </label>
+        <label class="checkbox-item group" id="lbl-group">
+          <input type="checkbox" id="chk-group"> For Group Interventions
+        </label>
+        <label class="checkbox-item notcore" id="lbl-notcore">
+          <input type="checkbox" id="chk-notcore"> Not Core
+        </label>
+      </div>
     </div>
   </div>
 
-  <div class="control-group">
-    <label class="group-title">Timepoint</label>
-    <div class="checkbox-row" id="timepoint-row"></div>
-  </div>
-
-  <div class="control-group">
-    <label class="group-title">Reporting Guideline</label>
-    <select id="sel-guideline">
-      <option value="">All guidelines</option>
-    </select>
-  </div>
-
-  <div class="control-group">
-    <label class="group-title">Search item</label>
-    <input type="text" id="search-box" placeholder="Filter by item text...">
-  </div>
-
-  <div class="control-group">
-    <label class="group-title">Tree</label>
-    <div class="checkbox-row">
-      <button class="reset-btn" id="expand-all-btn" style="margin-left:0;">Expand all</button>
-      <button class="reset-btn" id="collapse-all-btn" style="margin-left:0;">Collapse all</button>
+  <div class="ctrl-row" id="row-timepoint">
+    <div class="control-group">
+      <label class="group-title">Timepoint</label>
+      <div class="checkbox-row" id="timepoint-row"></div>
     </div>
   </div>
 
-  <button class="reset-btn" id="reset-btn">Reset filters</button>
+  <div class="ctrl-row" id="row-bottom">
+    <div class="control-group">
+      <label class="group-title">Reporting Guideline</label>
+      <select id="sel-guideline">
+        <option value="">All guidelines</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label class="group-title">Search item</label>
+      <input type="text" id="search-box" placeholder="Filter by item text...">
+    </div>
+
+    <div class="control-group" id="tree-group">
+      <label class="group-title">Tree</label>
+      <div class="checkbox-row">
+        <button class="reset-btn" id="expand-all-btn" style="margin-left:0;">Expand all</button>
+        <button class="reset-btn" id="collapse-all-btn" style="margin-left:0;">Collapse all</button>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="reset-btn">Reset filters</button>
+  </div>
 </div>
 
 <div class="meta-row">
