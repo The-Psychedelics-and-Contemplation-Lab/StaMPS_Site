@@ -278,6 +278,30 @@ footer.site-footer .footer-logos a:hover { opacity: 0.7; }
   footer.site-footer .footer-logos { justify-content: center; gap: 22px; }
 }
 
+/* Feedback form */
+.feedback-form { max-width: 640px; }
+.feedback-form .field { margin-bottom: 18px; }
+.feedback-form label { display: block; font-weight: 600; font-size: 14.5px; margin-bottom: 6px; }
+.feedback-form label .opt { font-weight: 400; color: var(--muted); font-size: 13px; }
+.feedback-form input, .feedback-form select, .feedback-form textarea {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--text);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+.feedback-form input:focus, .feedback-form select:focus, .feedback-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+.feedback-form textarea { resize: vertical; min-height: 120px; }
+.feedback-form button.btn.primary { cursor: pointer; border: none; }
+.notice.error { background: #fbeae7; border-color: #eccdbf; border-left-color: var(--accent); color: var(--text); }
+
 @media (max-width: 640px) {
   .hero h1 { font-size: 30px; }
   .hero { padding: 40px 0 32px; }
