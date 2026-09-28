@@ -212,11 +212,6 @@
   }
   td.item { min-width: 220px; }
   td.num { text-align: center; }
-  .core-meter { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; min-width: 46px; }
-  .core-val { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); }
-  .core-track { width: 100%; height: 4px; background: #ece7df; border-radius: 2px; overflow: hidden; }
-  .core-fill { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
-  .core-na { color: var(--muted); }
   td.guidelines { color: var(--muted); font-size: 12.5px; }
 
   .item-cell { display: flex; align-items: flex-start; gap: 6px; }
@@ -379,7 +374,6 @@
   <thead>
     <tr>
       <th data-key="item">Item <span class="arrow"></span></th>
-      <th data-key="numExperts">Experts Suggesting Core <span class="arrow"></span></th>
       <th data-key="verdict">Verdict <span class="arrow"></span></th>
       <th data-key="guidelines">Reporting Guidelines <span class="arrow"></span></th>
     </tr>
@@ -438,15 +432,6 @@ const DATA = D.map(r => ({
   timepoint: r[7] >= 0 ? TPS[r[7]] : null
 }));
 DATA.forEach((r, i) => { r.id = i; });
-
-// Max "experts suggesting core" count, used to scale the consensus-strength bar.
-const MAX_EXPERTS = Math.max(1, ...DATA.map(r => r.numExperts || 0));
-function coreMeter(n) {
-  if (n === null || n === undefined) return '<span class="core-na">—</span>';
-  const pct = n > 0 ? Math.max(8, Math.round(n / MAX_EXPERTS * 100)) : 0;
-  return `<div class="core-meter"><span class="core-val">${n}</span>`
-    + `<span class="core-track"><span class="core-fill" style="width:${pct}%"></span></span></div>`;
-}
 
 const allGuidelines = Array.from(new Set(DATA.flatMap(r => r.guidelines))).sort();
 const guidelineSelect = document.getElementById('sel-guideline');
@@ -599,11 +584,6 @@ function sortNodes(nodes) {
   return nodes.slice().sort((a, b) => {
     const ra = a.row, rb = b.row;
     let av = ra[sortKey], bv = rb[sortKey];
-    if (sortKey === 'numExperts') {
-      av = av === null ? -1 : av;
-      bv = bv === null ? -1 : bv;
-      return (av - bv) * sortDir;
-    }
     if (sortKey === 'guidelines') {
       av = ra.guidelines.join(', '); bv = rb.guidelines.join(', ');
     }
@@ -656,7 +636,6 @@ function renderNode(node, frag, f, anyFilterActive, anyVerdictSelected, colors) 
         <span class="item-text">${escapeHtml(r.item)}</span>
       </div>
     </td>
-    <td class="num" style="background:${tint};">${coreMeter(r.numExperts)}</td>
     <td style="background:${tint};"><span class="badge ${vClass}">${escapeHtml(vLabel)}</span></td>
     <td class="guidelines" style="background:${tint};">${escapeHtml(r.guidelines.join(', '))}</td>
   `;
@@ -690,7 +669,7 @@ function render() {
 
     const catTr = document.createElement('tr');
     catTr.className = 'category-header';
-    catTr.innerHTML = `<td colspan="4" style="background:${colors.header};color:#fff;">${escapeHtml(catGroup.category)}</td>`;
+    catTr.innerHTML = `<td colspan="3" style="background:${colors.header};color:#fff;">${escapeHtml(catGroup.category)}</td>`;
     frag.appendChild(catTr);
 
     catGroup.subs.forEach(sub => {
@@ -703,7 +682,7 @@ function render() {
       const subTr = document.createElement('tr');
       subTr.className = 'subcategory-header';
       subTr.setAttribute('data-subkey', subKey);
-      subTr.innerHTML = `<td colspan="4" style="background:${colors.sub};color:${colors.subText};">
+      subTr.innerHTML = `<td colspan="3" style="background:${colors.sub};color:${colors.subText};">
         <span class="subcat-toggle" data-subkey="${escapeHtml(subKey)}">${subExpanded ? '▾' : '▸'}</span>
         <span class="subcat-label">${escapeHtml(sub.subcategory)}</span>
       </td>`;
