@@ -49,12 +49,15 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 .prose > .callout { margin-top: var(--s-8); }
 
 /* --- Home ---------------------------------------------------------------------------- */
-.hero--stamps { border-bottom: 1px solid var(--rule); }
+.hero--stamps { border-bottom: 1px solid var(--rule); padding-block: var(--s-24) var(--s-16); }
 .hero--stamps .lead { color: var(--ink); }
-.stat { display: flex; flex-direction: column; }
-.stat__num { font-family: var(--font-serif); font-size: var(--fs-display); font-weight: 600; line-height: 1; color: var(--accent); letter-spacing: -0.015em; }
-.stat__label { font-family: var(--font-sans); font-size: var(--fs-ui); font-weight: 600; margin-top: var(--s-3); }
+.hero--stamps .watermark { top: -22%; right: -8%; }
+@media (max-width: 59.99em) { .hero--stamps { padding-block: var(--s-12) var(--s-12); } }
+/* Stat tiles (design-system .stat): value / label / one-line note */
+.stat > span { display: block; }
+.stat__label { color: var(--ink); font-weight: 600; }
 .stat__text { font-family: var(--font-sans); font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.5; margin-top: var(--s-2); }
+.media-row { margin-top: var(--s-12); }
 .purpose-grid { margin-top: var(--s-6); }
 .purpose h3 { font-size: var(--fs-h3); }
 .purpose--clinical h3 { color: var(--accent); }
@@ -84,10 +87,39 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 .prose > h2 + h4 { margin-top: var(--s-4); }
 
 /* --- Team ----------------------------------------------------------------------------- */
+.people { display: grid; gap: var(--s-4); }
+.prose > .people { margin-top: var(--s-4); }
+.person { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s-4) var(--s-6); align-items: start; }
+.person__initials {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 96px; height: 96px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  font-family: var(--font-serif); font-size: 2rem; font-weight: 600; letter-spacing: 0.02em;
+}
+.person__body { min-width: 0; }
+.person__body > * + * { margin-top: var(--s-3); }
 .person__role { font-family: var(--font-sans); font-size: var(--fs-ui); font-weight: 600; color: var(--accent); }
 .person p { font-size: var(--fs-ui); font-family: var(--font-sans); line-height: 1.6; }
-.prose > .person { margin-top: var(--s-4); }
-.prose > h2 + .person { margin-top: var(--s-4); }
+.person h3 + .person__role { margin-top: var(--s-1); }
+@media (max-width: 40em) { .person { grid-template-columns: 1fr; } .person__initials { width: 72px; height: 72px; font-size: 1.5rem; } }
+.partner-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--s-4); }
+.prose > .partner-row { margin-top: var(--s-6); }
+.partner-row .card { display: flex; align-items: center; justify-content: center; padding: var(--s-6); }
+.partner-row img { height: 56px; width: auto; max-width: 100%; }
+
+/* --- Page headers: reveal / watermark wrappers around <PageHeader> --------------------- */
+.page-header-wrap + .section { padding-top: var(--s-12); }
+.page-header-wrap .watermark { top: -40%; right: -10%; --wm-size: 44rem; }
+
+/* --- Section marks inside a reading column: left-aligned with the h2 they introduce ------- */
+.prose > .section-mark { align-items: flex-start; text-align: left; margin-top: var(--s-16); margin-bottom: var(--s-6); }
+.prose > .section-mark:first-child { margin-top: 0; }
+.prose > .section-mark + h2 { margin-top: 0; }
+
+/* --- Media cards: base.css's a.no-icon::after { content: none } would remove the card's gradient --- */
+a.media-card.no-icon::after { content: "" !important; }
+/* The tool screenshot is light: a deeper shade so the white title stays legible */
+.media-card--tool::after { background: linear-gradient(to top, rgba(28, 27, 25, 0.9) 0%, rgba(28, 27, 25, 0.55) 50%, rgba(28, 27, 25, 0.05) 85%) !important; }
 
 /* --- Feedback ------------------------------------------------------------------------- */
 .feedback-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-3); }

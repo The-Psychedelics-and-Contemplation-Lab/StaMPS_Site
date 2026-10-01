@@ -1,53 +1,77 @@
 ---
-import { PageHeader, Section } from '@pcl/design-system';
+import { PageHeader, Section, SectionMark } from '@pcl/design-system';
 import SiteLayout from '../../components/SiteLayout.astro';
 import { contactMailto } from '../../site.config';
 import { u } from '../../lib/url';
 ---
 <SiteLayout title="Team — StaMPS Data Framework" description="The StaMPS research team at McGill University and the Lady Davis Institute, the collaboration with the Psychedelic Mental Health Access Alliance, funding, and the international expert panel." path="/team/">
-  <PageHeader eyebrow="Who We Are" title="The Research Team" lead="The StaMPS Data Framework is led by a team at McGill University and the Lady Davis Institute for Medical Research, in collaboration with the Psychedelic Mental Health Access Alliance — and shaped by an international panel of 78 experts." />
+  <div class="page-header-wrap reveal reveal--fade"><PageHeader eyebrow="Who We Are" title="The Research Team" lead="The StaMPS Data Framework is led by a team at McGill University and the Lady Davis Institute for Medical Research, in collaboration with the Psychedelic Mental Health Access Alliance — and shaped by an international panel of 78 experts." /></div>
 
   <Section>
     <div class="prose">
-      <h2 id="pi">Principal Investigator</h2>
+      <h2 id="pi" class="reveal">Principal Investigator</h2>
+      <div class="people reveal-group">
       <div class="card person">
+        <span class="person__initials" aria-hidden="true">KG</span>
+        <div class="person__body">
         <h3>Kyle T. Greenway, M.D., M.Sc., FRCPC</h3>
         <p class="person__role">Principal Investigator — McGill University</p>
         <p>Dr. Greenway is an Assistant Professor in the Department of Psychiatry at McGill University, an attending psychiatrist at the Jewish General Hospital in Montreal, and an investigator at the Lady Davis Institute for Medical Research. He co-directs the Psychedelics and Contemplation research lab.</p>
         <p>His research spans clinical, naturalistic, and fundamental studies of psychedelic-assisted therapies, with particular attention to the extra-pharmacological factors — set, setting, culture, and care context — that shape treatment outcomes.</p>
         <p><a href="https://www.mcgill.ca/psychiatry/kyle-greenway" target="_blank" rel="noopener noreferrer">McGill profile</a> · <a href="https://www.ladydavis.ca/en/researcher/kyle-t-greenway/" target="_blank" rel="noopener noreferrer">Lady Davis Institute profile</a></p>
+        </div>
+      </div>
       </div>
 
-      <h2 id="co-investigators">Co-Investigators</h2>
+      <SectionMark label="Co-Investigators" accent />
+      <h2 id="co-investigators" class="reveal">Co-Investigators</h2>
+      <div class="people reveal-group">
       <div class="card person">
+        <span class="person__initials" aria-hidden="true">SS</span>
+        <div class="person__body">
         <h3>Sara de la Salle, Ph.D.</h3>
         <p class="person__role">Co-Investigator — McGill University</p>
         <p>Dr. de la Salle is a Postdoctoral Fellow in the Department of Psychiatry at McGill University, supervised by Dr. Kyle Greenway. Her research focuses on psilocybin-assisted psychotherapy, with an emphasis on how individual differences and treatment preferences shape therapeutic outcomes.</p>
         <p>She is currently leading Quebec’s first clinical trial of psilocybin-assisted therapy, examining the role of mindset, setting, and cultural context in informing more personalized approaches to care. Her work aims to advance rigorous, evidence-based practices in psychedelic-assisted treatment.</p>
+        </div>
       </div>
       <div class="card person">
+        <span class="person__initials" aria-hidden="true">EI</span>
+        <div class="person__body">
         <h3>Elisabeth Irvine, B.Sc.</h3>
         <p class="person__role">Co-Investigator — McGill University</p>
         <p>Ms. Irvine is a MSc student in the Mental Health program at McGill University, supervised by Dr. Kyle Greenway.</p>
         <p>She has experience coordinating research in both social and clinical psychology labs at McGill and is interested in understanding how social and contextual factors contribute to successful outcomes in psychedelic-assisted therapy.</p>
+        </div>
       </div>
       <div class="card person">
+        <span class="person__initials" aria-hidden="true">AL</span>
+        <div class="person__body">
         <h3>Alexandre Lehmann, Ph.D.</h3>
         <p class="person__role">Co-Investigator — McGill University</p>
         <p>Dr. Lehmann is an Assistant Professor in the Department of Otolaryngology–Head and Neck Surgery at McGill University and Principal Investigator at the Centre for Research on Brain, Language and Music (CRBLM).</p>
         <p>He has been involved in psychedelic science for over two decades, contributing to research, strategy, and stakeholder engagement across clinical, academic, and nonprofit sectors. His work is guided by an interest in the intersections of brain plasticity, music, and non-ordinary states.</p>
+        </div>
+      </div>
       </div>
 
-      <h2 id="pmha">Collaboration with the Psychedelic Mental Health Access Alliance</h2>
-      <div class="callout callout--green">
+      <SectionMark label="Collaboration" accent />
+      <h2 id="pmha" class="reveal">Collaboration with the Psychedelic Mental Health Access Alliance</h2>
+      <div class="callout callout--green reveal reveal--fade">
         <strong>A partnership for equitable, evidence-based implementation</strong>
         The <a href="https://www.pmhaa.org/" target="_blank" rel="noopener noreferrer">Psychedelic Mental Health Access Alliance (PMHA Alliance)</a> is a key sponsor and collaborator of this project. Founded in 2023, the PMHA Alliance works to expand access to psychedelic-assisted therapy for people most affected by trauma, poverty, and unmet mental health needs — generating the evidence, implementation learnings, and practical tools needed to responsibly integrate these therapies into publicly funded healthcare systems, including Medicaid-fundable models of care. Standardized, purpose-sensitive data collection is foundational to that mission: it is what allows real-world programs, trials, and payers to speak a common language about safety, effectiveness, and value.
       </div>
 
-      <h2 id="funding">Funding &amp; Support</h2>
+      <SectionMark label="Funding" accent />
+      <h2 id="funding" class="reveal">Funding &amp; Support</h2>
       <p>This study (protocol 25-05-146-01) is supported by the <strong>Psychedelic Mental Health Access Alliance (PMHA)</strong>, the <strong>Fonds de recherche du Québec — Santé (FRQS)</strong> Chercheur-Boursier J1 award, and the <strong>Lady Davis Institute for Medical Research (LDI)</strong>.</p>
+      <div class="partner-row reveal-group">
+        <a class="card no-icon" href="https://www.pmhaa.org/" target="_blank" rel="noopener noreferrer" aria-label="Psychedelic Mental Health Access Alliance (opens in a new tab)"><img src={u('/logos/pmha.png')} alt="Psychedelic Mental Health Access Alliance" width="504" height="160" loading="lazy" decoding="async" /></a>
+        <a class="card no-icon" href="https://frq.gouv.qc.ca/sante/" target="_blank" rel="noopener noreferrer" aria-label="Fonds de recherche du Québec – Santé (opens in a new tab)"><img src={u('/logos/frqs.jpg')} alt="Fonds de recherche du Québec – Santé" width="556" height="160" loading="lazy" decoding="async" /></a>
+      </div>
 
-      <h2 id="panel">The Expert Panel</h2>
+      <SectionMark label="Expert panel" accent />
+      <h2 id="panel" class="reveal">The Expert Panel</h2>
       <p>The framework is informed by an international panel of 78 experts across 13 countries, including clinicians, researchers, policy and health-economics specialists, and others with extensive knowledge and experience in psychedelic medicine. We are grateful for their thoughtful and sustained contributions across multiple rounds.</p>
 
       <div class="cluster">
