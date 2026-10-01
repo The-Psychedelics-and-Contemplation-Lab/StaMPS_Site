@@ -5,12 +5,12 @@ import { contactMailto } from '../../site.config';
 import { u } from '../../lib/url';
 ---
 <SiteLayout title="Team — StaMPS Data Framework" description="The StaMPS research team at McGill University and the Lady Davis Institute, the collaboration with the Psychedelic Mental Health Access Alliance, funding, and the international expert panel." path="/team/">
-  <div class="page-header-wrap reveal reveal--fade"><PageHeader eyebrow="Who We Are" title="The Research Team" lead="The StaMPS Data Framework is led by a team at McGill University and the Lady Davis Institute for Medical Research, in collaboration with the Psychedelic Mental Health Access Alliance — and shaped by an international panel of 78 experts." /></div>
+  <div class="page-header-wrap reveal reveal--wipe"><PageHeader eyebrow="Who We Are" title="The Research Team" lead="The StaMPS Data Framework is led by a team at McGill University and the Lady Davis Institute for Medical Research, in collaboration with the Psychedelic Mental Health Access Alliance — and shaped by an international panel of 78 experts." /></div>
 
   <Section>
-    <div class="prose">
-      <h2 id="pi" class="reveal">Principal Investigator</h2>
-      <div class="people reveal-group">
+    <div class="prose prose--centered">
+      <h2 id="pi" class="reveal-words text-center">Principal Investigator</h2>
+      <div class="people reveal-group reveal-group--slow">
       <div class="card person">
         <span class="person__initials" aria-hidden="true">KG</span>
         <div class="person__body">
@@ -24,8 +24,8 @@ import { u } from '../../lib/url';
       </div>
 
       <SectionMark label="Co-Investigators" accent />
-      <h2 id="co-investigators" class="reveal">Co-Investigators</h2>
-      <div class="people reveal-group">
+      <h2 id="co-investigators" class="reveal-words">Co-Investigators</h2>
+      <div class="people reveal-group reveal-group--slow">
       <div class="card person">
         <span class="person__initials" aria-hidden="true">SS</span>
         <div class="person__body">
@@ -56,23 +56,23 @@ import { u } from '../../lib/url';
       </div>
 
       <SectionMark label="Collaboration" accent />
-      <h2 id="pmha" class="reveal">Collaboration with the Psychedelic Mental Health Access Alliance</h2>
-      <div class="callout callout--green reveal reveal--fade">
+      <h2 id="pmha" class="reveal-words">Collaboration with the Psychedelic Mental Health Access Alliance</h2>
+      <div class="callout callout--green reveal reveal--rise-lg">
         <strong>A partnership for equitable, evidence-based implementation</strong>
         The <a href="https://www.pmhaa.org/" target="_blank" rel="noopener noreferrer">Psychedelic Mental Health Access Alliance (PMHA Alliance)</a> is a key sponsor and collaborator of this project. Founded in 2023, the PMHA Alliance works to expand access to psychedelic-assisted therapy for people most affected by trauma, poverty, and unmet mental health needs — generating the evidence, implementation learnings, and practical tools needed to responsibly integrate these therapies into publicly funded healthcare systems, including Medicaid-fundable models of care. Standardized, purpose-sensitive data collection is foundational to that mission: it is what allows real-world programs, trials, and payers to speak a common language about safety, effectiveness, and value.
       </div>
 
       <SectionMark label="Funding" accent />
-      <h2 id="funding" class="reveal">Funding &amp; Support</h2>
-      <p>This study (protocol 25-05-146-01) is supported by the <strong>Psychedelic Mental Health Access Alliance (PMHA)</strong>, the <strong>Fonds de recherche du Québec — Santé (FRQS)</strong> Chercheur-Boursier J1 award, and the <strong>Lady Davis Institute for Medical Research (LDI)</strong>.</p>
+      <h2 id="funding" class="reveal-words">Funding &amp; Support</h2>
+      <p class="reveal reveal--blur">This study (protocol 25-05-146-01) is supported by the <strong>Psychedelic Mental Health Access Alliance (PMHA)</strong>, the <strong>Fonds de recherche du Québec — Santé (FRQS)</strong> Chercheur-Boursier J1 award, and the <strong>Lady Davis Institute for Medical Research (LDI)</strong>.</p>
       <div class="partner-row reveal-group">
         <a class="card no-icon" href="https://www.pmhaa.org/" target="_blank" rel="noopener noreferrer" aria-label="Psychedelic Mental Health Access Alliance (opens in a new tab)"><img src={u('/logos/pmha.png')} alt="Psychedelic Mental Health Access Alliance" width="504" height="160" loading="lazy" decoding="async" /></a>
         <a class="card no-icon" href="https://frq.gouv.qc.ca/sante/" target="_blank" rel="noopener noreferrer" aria-label="Fonds de recherche du Québec – Santé (opens in a new tab)"><img src={u('/logos/frqs.jpg')} alt="Fonds de recherche du Québec – Santé" width="556" height="160" loading="lazy" decoding="async" /></a>
       </div>
 
       <SectionMark label="Expert panel" accent />
-      <h2 id="panel" class="reveal">The Expert Panel</h2>
-      <p>The framework is informed by an international panel of 78 experts across 13 countries, including clinicians, researchers, policy and health-economics specialists, and others with extensive knowledge and experience in psychedelic medicine. We are grateful for their thoughtful and sustained contributions across multiple rounds.</p>
+      <h2 id="panel" class="reveal-words">The Expert Panel</h2>
+      <p class="reveal reveal--blur">The framework is informed by an international panel of 78 experts across 13 countries, including clinicians, researchers, policy and health-economics specialists, and others with extensive knowledge and experience in psychedelic medicine. We are grateful for their thoughtful and sustained contributions across multiple rounds.</p>
 
       <div class="cluster">
         <a class="btn btn--primary" href={contactMailto}>Contact the Team</a>

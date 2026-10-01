@@ -51,8 +51,11 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 /* --- Home ---------------------------------------------------------------------------- */
 .hero--stamps { border-bottom: 1px solid var(--rule); padding-block: var(--s-24) var(--s-16); }
 .hero--stamps .lead { color: var(--ink); }
-.hero--stamps .watermark { top: -22%; right: -8%; }
-/* Acrostic title: one line per word group, the letters that spell StaMPS in a four-step
+/* The lattice sits behind the title and parallaxes at 0.25 (clamped to 400 px by data-parallax-max);
+   the title layer follows at 0.12 from the page top, so the hero has real depth: lattice, title, lead. */
+.hero--stamps .watermark { top: -30%; right: -8%; --wm-size: 64rem; }
+.hero--stamps .hero__title { position: relative; z-index: 1; }
+/* Acrostic title: one line per word, the capitals on the left spell StaMPS in a four-step
    scale of the accent (#B5502F darkened progressively). Measured on #FBFAF8:
    #7A3620 8.5:1 · #8F4027 6.9:1 · #A2482B 5.8:1 · #B5502F 4.9:1 — all ≥ 4.5:1. */
 .hero--stamps .acrostic {
@@ -68,14 +71,57 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 .acrostic__mark--m { color: #8F4027; }
 .acrostic__mark--p { color: #A2482B; }
 .acrostic__mark--s { color: #B5502F; }
-.hero--stamps .acrostic + .lead { margin-top: var(--s-8); }
+.hero--stamps .hero__title + .lead { margin-top: var(--s-8); }
 @media (max-width: 59.99em) { .hero--stamps { padding-block: var(--s-12) var(--s-12); } }
-/* Stat tiles (design-system .stat): value / label / one-line note */
+
+/* Three cards right after the hero: the scroll story continues. Each card is wrapped in a
+   .home-card that carries the mask reveal (uncovered from the bottom, staggered by the slow group);
+   the wrapper also carries the hover shadow, because the card's own clip-path would clip it. */
+.home-cards-section { padding-top: var(--s-12); }
+.home-cards { max-width: 60rem; margin-inline: auto; }
+.home-card { border-radius: var(--radius-card); }
+.home-card .media-card { height: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  /* let the lifted card's shadow show once the mask has finished uncovering */
+  html.js .home-cards .home-card.is-visible { clip-path: inset(-40px); }
+  .home-card { transition: box-shadow 500ms var(--ease); }
+  .home-card .media-card { transition: transform 500ms var(--ease), border-color 500ms var(--ease); }
+  .home-card:hover { box-shadow: 0 2px 4px rgba(43, 42, 39, 0.06), 0 18px 36px -18px rgba(43, 42, 39, 0.35); }
+  .home-card:hover .media-card, .home-card:focus-within .media-card { transform: translateY(-2px); }
+}
+/* Media-card text: base.css's a:hover recolours the anchor, and the card's text/eyebrow inherit it —
+   that was the "grey on hover" bug. Pin all card text to white, fully opaque, on every state. */
+.media-card, .media-card:hover, .media-card:focus-visible { color: #fff; }
+.media-card__eyebrow, .media-card__title, .media-card__text { color: #fff; }
+.media-card__text { opacity: 1; }
+.media-card__eyebrow { opacity: 1; }
+/* The tool screenshot is light: a deeper scrim so white text measures ≥ 4.5:1 over it on hover */
+.media-card--tool::after { background: linear-gradient(to top, rgba(20, 18, 17, 0.94) 0%, rgba(20, 18, 17, 0.82) 45%, rgba(20, 18, 17, 0.2) 100%) !important; }
+/* The wordmark / progress marks are wide: let them use the card's width */
+.media-card__mark { padding: 16% 14%; }
+.media-card__mark img { max-width: none; }
+/* Touch screens and reduced motion show the text permanently: move the mark up and dim it so it never sits
+   behind the words (the same end state a hover reaches on desktop). */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .media-card--hover .media-card__mark { opacity: 0.35; padding-bottom: 42%; }
+}
+
+/* Stat tiles (design-system .stat): value / label / one-line note, four across in a centred 60rem row */
 .stat > span { display: block; }
 .stat__label { color: var(--ink); font-weight: 600; }
 .stat__text { font-family: var(--font-sans); font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.5; margin-top: var(--s-2); }
-.media-row { margin-top: var(--s-12); }
 .purpose-grid { margin-top: var(--s-6); }
+
+/* Centred reading column with a wider (60rem) row for grids and tables between two prose blocks */
+.reading > .section-mark { margin-top: 0; margin-bottom: var(--s-6); }
+.reading > .section-mark + h2 { margin-top: 0; }
+.prose hr.h2-rule { width: 3rem; height: 2px; border: 0; background: var(--accent); margin: var(--s-4) auto 0; }
+.prose hr.h2-rule + p { margin-top: var(--s-6); }
+.row-60 { width: min(100%, 60rem); margin-inline: auto; margin-top: var(--s-8); }
+.reading--after { margin-top: var(--s-8); }
+.cluster--center { justify-content: center; }
+.reading .text-center + .cluster, .text-center .cluster { justify-content: center; }
+.rounds-table { margin-top: var(--s-8); }
 .purpose h3 { font-size: var(--fs-h3); }
 .purpose--clinical h3 { color: var(--accent); }
 .purpose--academic h3 { color: var(--stamps-group); }
@@ -127,16 +173,24 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 /* --- Page headers: reveal / watermark wrappers around <PageHeader> --------------------- */
 .page-header-wrap + .section { padding-top: var(--s-12); }
 .page-header-wrap .watermark { top: -40%; right: -10%; --wm-size: 44rem; }
+/* Reading pages: the header sits in the same centred 64ch column as the text below it (the tool page's
+   header is `wide` and stays wide). */
+.page-header-wrap .page-header > .container { width: min(100% - 2 * var(--gutter), 64ch); }
+.prose--centered { margin-inline: auto; }
 
-/* --- Section marks inside a reading column: left-aligned with the h2 they introduce ------- */
-.prose > .section-mark { align-items: flex-start; text-align: left; margin-top: var(--s-16); margin-bottom: var(--s-6); }
+/* --- Section marks inside a reading column: centred (as designed), with the h2 right under ------- */
+.prose > .section-mark { margin-top: var(--s-16); margin-bottom: var(--s-6); }
 .prose > .section-mark:first-child { margin-top: 0; }
 .prose > .section-mark + h2 { margin-top: 0; }
+.prose > .section-mark + h2 { text-align: center; }
+.prose > .section-mark + h2 + hr.h2-rule + * { margin-top: var(--s-6); }
 
 /* --- Media cards: base.css's a.no-icon::after { content: none } would remove the card's gradient --- */
 a.media-card.no-icon::after { content: "" !important; }
-/* The tool screenshot is light: a deeper shade so the white title stays legible */
-.media-card--tool::after { background: linear-gradient(to top, rgba(28, 27, 25, 0.9) 0%, rgba(28, 27, 25, 0.55) 50%, rgba(28, 27, 25, 0.05) 85%) !important; }
+/* Link cards (partner logos) lift 2 px with a soft shadow */
+@media (prefers-reduced-motion: no-preference) {
+  a.card:hover, a.card:focus-visible { transform: translateY(-2px); box-shadow: var(--shadow-card); border-color: var(--ink-muted); }
+}
 
 /* --- Feedback ------------------------------------------------------------------------- */
 .feedback-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s-3); }
@@ -231,8 +285,8 @@ tr[data-level="2"] .item-text, tr[data-level="3"] .item-text { font-size: var(--
 .site-footer__logos > a:nth-child(n + 3) img { height: 44px; width: auto; }
 .site-footer__logos > a:nth-child(3) { padding-left: var(--s-4); border-left: 1px solid var(--rule); }
 
-/* --- Stats row: four cards on one line when there is room ------------------------------- */
-.stats-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+/* --- Stats row: four tiles on one line in a centred 60rem row ---------------------------- */
+.stats-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); max-width: 60rem; margin-inline: auto; }
 @media (min-width: 48em) { .purpose-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* --- Tables: the design-system's sticky <thead> (top: --header-h) only sticks against the page
