@@ -2,6 +2,15 @@
 import { Section, SectionMark, Watermark, MediaCard } from '@pcl/design-system';
 import SiteLayout from '../components/SiteLayout.astro';
 import { u } from '../lib/url';
+
+/* Acrostic title: the highlighted letters spell StaMPS. Same pattern as the ReSPCT cover:
+   one <h1> carrying the full expansion as aria-label, the visual lines aria-hidden. */
+const lines: { before: string; mark: string; after: string; key: string }[] = [
+  { before: '', mark: 'Sta', after: 'ndardizing', key: 'sta' },
+  { before: '', mark: 'M', after: 'easures and', key: 'm' },
+  { before: '', mark: 'P', after: 'ractices in', key: 'p' },
+  { before: 'Psychedelic ', mark: 'S', after: 'cience', key: 's' },
+];
 ---
 <SiteLayout title="StaMPS Data Framework — Standardizing Measures in Psychedelic Science" description="An international expert-consensus initiative developing a standardized data framework for psychedelic science, led at McGill University in collaboration with the Psychedelic Mental Health Access Alliance." path="/">
 
@@ -9,7 +18,11 @@ import { u } from '../lib/url';
       <Watermark motif="lattice" position="right" />
       <div class="container hero__inner">
         <p class="eyebrow reveal reveal--fade">McGill University · PMHA Alliance</p>
-        <h1 class="reveal" style="--reveal-delay:60ms">Standardizing Measures in Psychedelic Science</h1>
+        <h1 class="acrostic reveal" style="--reveal-delay:60ms" aria-label="Standardizing Measures and Practices in Psychedelic Science (StaMPS)">
+          {lines.map((l) => (
+            <span class={`acrostic__line acrostic__line--${l.key}`} aria-hidden="true">{l.before}<span class={`acrostic__mark acrostic__mark--${l.key}`}>{l.mark}</span>{l.after}</span>
+          ))}
+        </h1>
         <p class="lead reveal" style="--reveal-delay:140ms"><strong>The StaMPS Data Framework</strong> is an international expert-consensus initiative focused on standardizing data collection in psychedelic science. It is developing a purpose-sensitive framework to guide what data should be collected, when, and in which contexts, in order to support more rigorous, consistent, and equitable research and practice.</p>
         <div class="cluster reveal reveal--fade" style="--reveal-delay:220ms">
           <a class="btn btn--primary" href={u('/tool/')}>Explore the tool</a>

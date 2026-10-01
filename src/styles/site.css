@@ -52,6 +52,23 @@ h3 > .chip, h2 > .chip { margin-left: var(--s-2); vertical-align: 0.2em; }
 .hero--stamps { border-bottom: 1px solid var(--rule); padding-block: var(--s-24) var(--s-16); }
 .hero--stamps .lead { color: var(--ink); }
 .hero--stamps .watermark { top: -22%; right: -8%; }
+/* Acrostic title: one line per word group, the letters that spell StaMPS in a four-step
+   scale of the accent (#B5502F darkened progressively). Measured on #FBFAF8:
+   #7A3620 8.5:1 · #8F4027 6.9:1 · #A2482B 5.8:1 · #B5502F 4.9:1 — all ≥ 4.5:1. */
+.hero--stamps .acrostic {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  max-width: none;
+  text-wrap: initial;
+}
+.acrostic__line { display: block; }
+.acrostic__mark { font-weight: 700; }
+.acrostic__mark--sta { color: #7A3620; }
+.acrostic__mark--m { color: #8F4027; }
+.acrostic__mark--p { color: #A2482B; }
+.acrostic__mark--s { color: #B5502F; }
+.hero--stamps .acrostic + .lead { margin-top: var(--s-8); }
 @media (max-width: 59.99em) { .hero--stamps { padding-block: var(--s-12) var(--s-12); } }
 /* Stat tiles (design-system .stat): value / label / one-line note */
 .stat > span { display: block; }
