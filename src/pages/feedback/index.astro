@@ -1,0 +1,31 @@
+---
+import { PageHeader, Section } from '@pcl/design-system';
+import SiteLayout from '../../components/SiteLayout.astro';
+import { contactEmail, feedbackMailto } from '../../site.config';
+import { u } from '../../lib/url';
+---
+<SiteLayout title="Give Feedback — StaMPS Data Framework" description="Share feedback on the StaMPS Data Framework and its interactive tool: content, usability, missing or mislabeled items. Feedback goes by e-mail to the StaMPS team at McGill University." path="/feedback/" bannerFeedbackLink={false}>
+  <PageHeader eyebrow="We'd Love Your Input" title="Share your feedback" lead="We actively welcome feedback from researchers, clinicians, policymakers, people with lived experience, and other stakeholders on the framework's content, the tool's usability, and anything we may have missed. Only the message is required." />
+
+  <Section>
+    <div class="prose">
+      <p>Feedback goes straight to the StaMPS team by e-mail — this website does not collect or store any information itself. The button below opens a pre-addressed message in your mail app, with a short template you can fill in or delete:</p>
+      <ul class="feedback-list">
+        <li>Name <span class="muted">(optional)</span></li>
+        <li>Email <span class="muted">(optional — so we can follow up)</span></li>
+        <li>You are… <span class="muted">(optional)</span> — Researcher / academic · Clinician · Policymaker · Person with lived experience · Other</li>
+        <li>Your feedback is about… <span class="muted">(optional)</span> — The interactive tool · The framework content (items, verdicts) · Something else</li>
+        <li>Message — what worked, what's missing, suggestions, corrections…</li>
+      </ul>
+      <div class="cluster">
+        <a class="btn btn--primary" href={feedbackMailto}>Send feedback by e-mail</a>
+        <a class="btn btn--secondary" href={u('/tool/')}>Back to the tool</a>
+      </div>
+      <p class="sans muted">If the button does not open your mail app, write to <a href={`mailto:${contactEmail}`}>{contactEmail}</a> with the subject “StaMPS Data Framework — Website Feedback”.</p>
+      <div class="callout callout--green">
+        <strong>Thank you!</strong>
+        Your feedback is sent to the StaMPS team. We really appreciate you taking the time.
+      </div>
+    </div>
+  </Section>
+</SiteLayout>
