@@ -50,6 +50,8 @@ Feedback links throughout the site open a pre-addressed e-mail to `contactEmail`
 
 ## Hosting note
 
-The site is built by GitHub Actions from `main` and served by GitHub Pages at
-https://stamps.psychedelicsandcontemplationlab.com. The legacy Vercel project only
-serves a permanent redirect to that domain (`vercel.json` + `vercel-redirect/`).
+Until launch, this Astro site lives on the `astro` branch and is previewed on GitHub Pages
+(https://the-psychedelics-and-contemplation-lab.github.io/stamps-website/). `main` still holds the
+legacy static site deployed by Vercel (https://stamps-website.vercel.app). At launch: merge `astro`
+into `main`, set `PUBLIC_SITE_BASE=''`/`PUBLIC_SITE_URL` in the workflow, set the custom domain on
+GitHub Pages, and turn the Vercel project into a redirect.
