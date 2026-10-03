@@ -1,0 +1,16 @@
+{
+  "name": "stamps-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:html": "node scripts/check-html.mjs",
+    "update-design": "npm update @pcl/design-system"
+  },
+  "dependencies": {
+    "@pcl/design-system": "github:The-Psychedelics-and-Contemplation-Lab/design-system#main",
+    "astro": "^7.3.5"
+  }
+}

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stamps.psychedelicsandcontemplationlab.com/sitemap.xml
