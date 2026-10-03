@@ -1,9 +1,0 @@
----
-/** The "project in progress" line shown above every page. */
-import { u } from '../lib/url';
-export interface Props { text?: string; feedbackLink?: boolean }
-const { text = 'This project is in progress: two of four consensus rounds are complete and all recommendations are preliminary.', feedbackLink = true } = Astro.props;
----
-<div class="status-banner" role="note">
-  <div class="container">{text} {feedbackLink && <a href={u('/feedback/')}>Your feedback is welcome</a>}{feedbackLink && '.'}</div>
-</div>

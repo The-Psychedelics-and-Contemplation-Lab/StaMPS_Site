@@ -1,55 +1,45 @@
-# StaMPS Data Framework — website
+# StaMPS Data Framework — Website
 
-Website of **Standardizing Measures and Practices in Psychedelic Science (StaMPS) Data Framework**, a modified Delphi expert-consensus study (protocol 25-05-146-01) led at McGill University in collaboration with the Psychedelic Mental Health Access Alliance.
+Static website for **Standardizing Measures and Practices in Psychedelic Science (StaMPS) Data Framework**, a modified Delphi expert-consensus study (protocol 25-05-146-01) led at McGill University in collaboration with the Psychedelic Mental Health Access Alliance.
 
-Built with [Astro](https://astro.build) and the lab's shared [design-system](https://github.com/The-Psychedelics-and-Contemplation-Lab/design-system). Published automatically to GitHub Pages on every push to `main` (and nightly, to pick up design-system changes).
+## Contents
 
-## Pages
+| File | Purpose |
+|---|---|
+| `index.html` | Welcome page: initiative, rationale, and study design |
+| `tool.html` | Interactive data framework tool (purpose + specifier driven) |
+| `progress.html` | Summary of Round 1 & Round 2 results and next steps |
+| `team.html` | Research team and PMHA Alliance collaboration |
+| `data.js` | Item library (412 items, post-Round 2 verdicts) — regenerate as consensus advances |
+| `style.css` | Shared stylesheet |
+| `vercel.json` | Vercel config (clean URLs) |
 
-| URL | File | Purpose |
-|---|---|---|
-| `/` | `src/pages/index.astro` | Welcome: initiative, rationale, study design |
-| `/tool/` | `src/pages/tool/index.astro` + `src/scripts/tool.js` | Interactive data framework tool (verdict / timepoint / guideline / search filters) |
-| `/progress/` | `src/pages/progress/index.astro` | Round 1 & Round 2 results and next steps |
-| `/team/` | `src/pages/team/index.astro` | Research team, PMHA Alliance collaboration, funding |
-| `/feedback/` | `src/pages/feedback/index.astro` | Feedback by e-mail (no form — the site collects no data) |
+No build step, frameworks, or dependencies — plain HTML/CSS/JS.
 
-`src/site.config.ts` holds the site name, accent colour, navigation, affiliation line, the contact e-mail
-(`contactEmail`) and the schema.org ResearchProject block. `src/components/StatusBanner.astro` is the
-"project in progress" line shown on every page — edit its default text there when a round completes.
+## Deploying to Vercel
+
+**Option A — drag and drop (easiest):**
+1. Go to [vercel.com/new](https://vercel.com/new) and sign in.
+2. Drag this `stamps-website` folder onto the page.
+3. Deploy. Done — you'll get a URL like `stamps-framework.vercel.app` (renameable in Project Settings → Domains).
+
+**Option B — command line:**
+```
+cd stamps-website
+npx vercel --prod
+```
+
+**Option C — Git integration (best for ongoing updates):** push this folder to a GitHub repository and import it at vercel.com/new; every push then redeploys automatically.
 
 ## Updating the tool after Rounds 3–4
 
-All item data live in **`src/data/items.js`** — the same auto-generated format as the former `data.js`,
-with `export` in front of each constant so the tool script can import it. Regenerate the file from the master
-sheet exactly as before, add `export` to `CATS`, `SUBS`, `GUIDES`, `TPS` and `D`, replace the file, commit.
-Each row of `D` is:
-
+All item data live in `data.js`. Each row is:
 `[categoryIndex, subcategoryIndex, "Item name", indentLevel, expertsSuggestingCore, verdict, guidelineBitmask, timepointIndex]`
 
-- `verdict`: `0` = no verdict yet (under evaluation), `1` = Core (all purposes), `2` = Core for Economic purposes only, `3` = Core for group interventions only. New verdict types (e.g. Supplementary, Equity module) are added in `VERDICT_NAMES` and `verdictClass()` in `src/scripts/tool.js`, with a matching `.chip--…` colour in `src/styles/site.css`.
+- `verdict`: `0` = no verdict yet (under evaluation), `1` = Core (all purposes), `2` = Core for Economic purposes only, `3` = Core for group interventions only. New verdict types (e.g., Supplementary, Equity module) can be added in `VERDICT_NAMES` and `verdictClass()` in `tool.html`.
 - `guidelineBitmask`: bit *i* set means the item maps to `GUIDES[i]`.
 - `timepointIndex`: index into `TPS` (`-1` = general/unspecified).
 
-The filtering, tree and sorting logic in `src/scripts/tool.js` is the original tool's, unchanged.
-
-## Working locally
-```
-npm install
-npm run dev        # http://localhost:4321/stamps-website/
-npm run build && npm run check:html
-```
-
-While the site is tested on github.io it lives under `/stamps-website/`; once the custom domain
-(`stamps.psychedelicsandcontemplationlab.com`) is switched on, set `PUBLIC_SITE_BASE=""` and
-`PUBLIC_SITE_URL` in the deploy workflow.
-
 ## Feedback
 
-Feedback links throughout the site open a pre-addressed e-mail to `contactEmail` (set in `src/site.config.ts`).
-
-## Hosting note
-
-The site is built by GitHub Actions from `main` and served by GitHub Pages at
-https://stamps.psychedelicsandcontemplationlab.com. The legacy Vercel project only
-serves a permanent redirect to that domain (`vercel.json` + `vercel-redirect/`).
+Feedback links throughout the site open a pre-addressed email to `kyle.greenway@mcgill.ca`.
