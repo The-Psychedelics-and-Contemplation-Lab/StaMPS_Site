@@ -28,8 +28,13 @@ jobs:
           npm install --no-audit --no-fund
           npm update @pcl/design-system --no-audit --no-fund
       - run: npm run build
+        env:
+          PUBLIC_SITE_BASE: ''
+          PUBLIC_SITE_URL: https://stamps.psychedelicsandcontemplationlab.com
       - name: Check the build (one h1 per page, no broken internal links)
         run: npm run check:html
+        env:
+          PUBLIC_SITE_BASE: ''
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
