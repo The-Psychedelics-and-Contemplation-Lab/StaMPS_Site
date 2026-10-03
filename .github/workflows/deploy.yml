@@ -4,7 +4,7 @@
 name: Build and deploy
 on:
   push:
-    branches: [astro]   # switch back to [main] when the Vercel site is retired
+    branches: [main]   # switch back to [main] when the Vercel site is retired
   schedule:
     - cron: '17 4 * * *'   # 04:17 UTC daily — pulls the latest design-system
   workflow_dispatch:

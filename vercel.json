@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "echo 'Redirect-only deployment: the site now lives on GitHub Pages'",
+  "installCommand": "echo 'no install'",
+  "outputDirectory": "vercel-redirect",
+  "redirects": [
+    { "source": "/(.*)", "destination": "https://stamps.psychedelicsandcontemplationlab.com/$1", "permanent": true }
+  ]
+}

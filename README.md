@@ -47,3 +47,9 @@ While the site is tested on github.io it lives under `/stamps-website/`; once th
 ## Feedback
 
 Feedback links throughout the site open a pre-addressed e-mail to `contactEmail` (set in `src/site.config.ts`).
+
+## Hosting note
+
+The site is built by GitHub Actions from `main` and served by GitHub Pages at
+https://stamps.psychedelicsandcontemplationlab.com. The legacy Vercel project only
+serves a permanent redirect to that domain (`vercel.json` + `vercel-redirect/`).
