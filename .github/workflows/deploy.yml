@@ -24,7 +24,9 @@ jobs:
         with:
           node-version: 22
       - name: Install (always fetch the latest design-system from GitHub)
-        run: npm install --no-audit --no-fund
+        run: |
+          npm install --no-audit --no-fund
+          npm update @pcl/design-system --no-audit --no-fund
       - run: npm run build
       - name: Check the build (one h1 per page, no broken internal links)
         run: npm run check:html
